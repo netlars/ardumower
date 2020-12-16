@@ -183,14 +183,14 @@ void IMU::deleteCalib(){
   accScale.x=accScale.y=accScale.z=2;  
   comOfs.x=comOfs.y=comOfs.z=0;
   comScale.x=comScale.y=comScale.z=2;  
-  Console.println("IMU calibration deleted");  
+  Console.println(F("IMU calibration deleted"));  
 }
 
 void IMU::printPt(point_float_t p){
   Console.print(p.x);
-  Console.print(",");    
+  Console.print(F(","));    
   Console.print(p.y);  
-  Console.print(",");
+  Console.print(F(","));
   Console.println(p.z);  
 }
 
@@ -453,9 +453,9 @@ void  IMU::initCom(){
        // Set RESET
        I2CwriteTo(MMC5883MA,0x8,0x10);
        I2CreadFrom(MMC5883MA, 0x00, 6, (uint8_t*)buf);
-       x -= (int16_t) (((uint16_t)buf[1]) << 8 | buf[0]);
-       y -= (int16_t) (((uint16_t)buf[3]) << 8 | buf[2]);
-       z -= (int16_t) (((uint16_t)buf[5]) << 8 | buf[4]);  
+       x -= (int16_t) ((((uint16_t)buf[1]) << 8) | buf[0]);
+       y -= (int16_t) ((((uint16_t)buf[3]) << 8) | buf[2]);
+       z -= (int16_t) ((((uint16_t)buf[5]) << 8) | buf[4]);  
        x /= 2; y /= 2; z /= 2;
        // Clr RESET
        I2CwriteTo(MMC5883MA,0x8,0x0);
@@ -530,7 +530,7 @@ bool IMU::readCom(){
 
 float IMU::sermin(float oldvalue, float newvalue){
   if (newvalue < oldvalue) {
-    Console.print(".");
+    Console.print(F("."));
     digitalWrite(pinLED, true);
   }
   return min(oldvalue, newvalue);
@@ -538,7 +538,7 @@ float IMU::sermin(float oldvalue, float newvalue){
 
 float IMU::sermax(float oldvalue, float newvalue){
   if (newvalue > oldvalue) {
-    Console.print(".");
+    Console.print(F("."));
     digitalWrite(pinLED, true);
   }
   return max(oldvalue, newvalue);
@@ -623,19 +623,19 @@ void IMU::calibComUpdate(){
     if (newfound) {      
       foundNewMinMax = true;
       Buzzer.tone(440);
-      Console.print("x:");
+      Console.print(F("x:"));
       Console.print(comMin.x);
-      Console.print(",");
+      Console.print(F(","));
       Console.print(comMax.x);
-      Console.print("\t  y:");
+      Console.print(F("\t  y:"));
       Console.print(comMin.y);
-      Console.print(",");
+      Console.print(F(","));
       Console.print(comMax.y);
-      Console.print("\t  z:");
+      Console.print(F("\t  z:"));
       Console.print(comMin.z);
-      Console.print(",");
+      Console.print(F(","));
       Console.print(comMax.z);    
-      Console.println("\t");
+      Console.println(F("\t"));
     } else Buzzer.noTone();   
   }    
 }
@@ -660,9 +660,9 @@ boolean IMU::calibAccNextAxis(){
     pt.y += acc.y / 100.0;
     pt.z += acc.z / 100.0;                  
     Console.print(acc.x);
-    Console.print(",");
+    Console.print(F(","));
     Console.print(acc.y);
-    Console.print(",");
+    Console.print(F(","));
     Console.println(acc.z);
     delay(1);
   }
@@ -674,9 +674,9 @@ boolean IMU::calibAccNextAxis(){
   accMax.z = max(accMax.z, pt.z);           
   calibAccAxisCounter++;        
   useAccCalibration = true;  
-  Console.print("side ");
+  Console.print(F("side "));
   Console.print(calibAccAxisCounter);
-  Console.println(" of 6 completed");    
+  Console.println(F(" of 6 completed"));    
   if (calibAccAxisCounter == 6){    
     // all axis complete 
     float xrange = accMax.x - accMin.x;
@@ -690,7 +690,7 @@ boolean IMU::calibAccNextAxis(){
     accScale.z = zrange;    
     printCalib();
     saveCalib();    
-    Console.println("acc calibration completed");    
+    Console.println(F("acc calibration completed"));    
     complete = true;
     // completed sound
     Buzzer.tone(600);
