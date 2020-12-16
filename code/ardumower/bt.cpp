@@ -97,7 +97,7 @@ void BluetoothConfig::setName(String name){
   Console.println();
   Console.print(F("setting name "));
   Console.print(name);
-  Console.println("...");
+  Console.println(F("..."));
   switch (btType){
     case BT_LINVOR_HC06:
       writeReadBT("AT+NAME"+name);     

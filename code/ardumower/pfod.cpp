@@ -1484,7 +1484,7 @@ bool RemoteControl::readSerial(){
         else pfodCmd += ch;                
     }
     if (pfodCmdComplete) {
-      Console.print("pfod cmd=");
+      Console.print(F("pfod cmd="));
       Console.println(pfodCmd);
       pfodState = PFOD_MENU;    
       if (pfodCmd == ".") sendMainMenu(false);      
